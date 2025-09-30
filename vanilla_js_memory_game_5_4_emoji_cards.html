@@ -7,7 +7,7 @@
   <style>
   :root {
     --gap: 12px;
-    --purple: #7c3aed; /* solid purple back */
+    --purple: #7c3aed;
     --bg: #0b1020;
     --panel: #11162a;
     --text: #e6e8ee;
@@ -66,7 +66,7 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: var(--gap);
-    perspective: 1000px; /* needed for 3D flip */
+    perspective: 1000px;
   }
 
   /* Card */
@@ -80,27 +80,22 @@
     outline: none;
     border: 1px solid rgba(255,255,255,.06);
     background: transparent;
-    /* allow container query units on child text sizing */
-    container-type: size;
   }
 
-  /* Inner wrapper – this is the ONLY thing we rotate on flip */
+  /* Rotate ONLY the inner wrapper on flip */
   .card-inner {
     position: absolute;
     inset: 0;
     transform-style: preserve-3d;
     transition: transform 420ms cubic-bezier(.2,.8,.2,1);
     border-radius: inherit;
-    overflow: clip;
+    overflow: hidden;
+    will-change: transform;
   }
-
-  /* Flip trigger */
   .card.flipped .card-inner,
-  .card[aria-pressed="true"] .card-inner {
-    transform: rotateY(180deg);
-  }
+  .card[aria-pressed="true"] .card-inner { transform: rotateY(180deg); }
 
-  /* Two sides (fill whole card, same radius, centered content) */
+  /* Both sides fill the card and are perfectly centered */
   .face, .back {
     position: absolute;
     inset: 0;
@@ -109,13 +104,12 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     border-radius: inherit;
-    /* Big emoji, scales with card width; line-height avoids vertical drift */
     font-size: clamp(36px, 28cqw, 64px);
     line-height: 1;
     text-align: center;
   }
 
-  /* Back: visible initially */
+  /* Back is visible initially */
   .back {
     background: var(--purple);
     transform: rotateY(0deg);
@@ -131,27 +125,26 @@
     pointer-events: none;
   }
 
-  /* Face: hidden initially, flips into view */
+  /* Face is hidden initially and flips into view */
   .face {
     background: #ffffff;
     color: #111;
     transform: rotateY(180deg);
   }
 
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-  }
-
-  /* Matched state – fade out then hide */
+  /* Matched → fade out */
   .card.matched {
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
     transition: opacity 260ms ease 120ms, visibility 0s linear 380ms;
   }
-</style>
 
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+</style>
 </head>
 <body>
   <main class="game" aria-label="Memory game" aria-live="polite">
