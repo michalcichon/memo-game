@@ -103,16 +103,15 @@
       position: absolute;
       inset: 0;
       transform-style: preserve-3d;
-      transition: transform 420ms cubic-bezier(.2,.8,.2,1);
       border-radius: inherit;
       overflow: clip;
     }
 
     .face, .back {
-      position: absolute; inset: 0;
-      display: grid; place-items: center;
+      background: var(--purple);
+      font-size: 24px;
+      transform: rotateY(0deg);
       backface-visibility: hidden;
-      border-radius: inherit;
     }
 
     .back {
@@ -130,12 +129,14 @@
 
     .face {
       transform: rotateY(180deg);
+      backface-visibility: hidden;
       font-size: clamp(26px, 10cqw, 42px);
-      background: linear-gradient(180deg, #0e1530, #0c1125);
+      background: #ffffff; /* white face background */
+      color: #111; /* ensure emoji/text contrast if needed */
     }
 
-    .card[aria-pressed="true"] .card-inner,
-    .card.flipped .card-inner { transform: rotateY(180deg); }
+    .card.flipped .face { transform: rotateY(0deg); }
+    .card.flipped .back { transform: rotateY(180deg); }
 
     .card.matched { pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 260ms ease 120ms, visibility 0s linear 380ms; }
 
