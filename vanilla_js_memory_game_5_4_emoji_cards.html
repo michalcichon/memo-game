@@ -63,51 +63,66 @@
   }
 
   .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: var(--gap);
-    perspective: 1000px;
-  }
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--gap);
+      perspective: 1200px;
+      -webkit-perspective: 1200px;
+    }
 
   /* Card */
   .card {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 11/14;
-    border-radius: calc(var(--radius) * .9);
-    box-shadow: var(--shadow);
-    cursor: pointer;
-    outline: none;
-    border: 1px solid rgba(255,255,255,.06);
-    background: transparent;
-  }
+      position: relative;
+      width: 100%;
+      aspect-ratio: 11/14;
+      border-radius: calc(var(--radius) * .9);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      outline: none;
+      border: 1px solid rgba(255,255,255,.06);
+      background: transparent;
+      display: block; /* avoid Safari button backface quirks */
+      -webkit-appearance: none;
+      appearance: none;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+    }
 
   /* Rotate ONLY the inner wrapper on flip */
   .card-inner {
-    position: absolute;
-    inset: 0;
-    transform-style: preserve-3d;
-    transition: transform 420ms cubic-bezier(.2,.8,.2,1);
-    border-radius: inherit;
-    overflow: hidden;
-    will-change: transform;
-  }
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      transition: transform 420ms cubic-bezier(.2,.8,.2,1);
+      border-radius: inherit;
+      overflow: hidden;
+      will-change: transform;
+      transform: rotateY(0deg);
+      -webkit-transform: rotateY(0deg);
+    }
   .card.flipped .card-inner,
-  .card[aria-pressed="true"] .card-inner { transform: rotateY(180deg); }
+    .card[aria-pressed="true"] .card-inner {
+      transform: rotateY(180deg);
+      -webkit-transform: rotateY(180deg);
+    }
 
   /* Both sides fill the card and are perfectly centered */
   .face, .back {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-radius: inherit;
-    font-size: clamp(36px, 28cqw, 64px);
-    line-height: 1;
-    text-align: center;
-  }
+      background: var(--purple);
+      transform: rotateY(0deg) translateZ(1px);
+      -webkit-transform: rotateY(0deg) translateZ(1px);
+    }
+    .back::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(12px 12px at 20% 30%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(10px 10px at 70% 60%, rgba(0,0,0,.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: .35;
+      pointer-events: none;
+    }
 
   /* Back is visible initially */
   .back {
@@ -127,10 +142,11 @@
 
   /* Face is hidden initially and flips into view */
   .face {
-    background: #ffffff;
-    color: #111;
-    transform: rotateY(180deg);
-  }
+      background: #ffffff;
+      color: #111;
+      transform: rotateY(180deg) translateZ(1px);
+      -webkit-transform: rotateY(180deg) translateZ(1px);
+    }
 
   /* Matched → fade out */
   .card.matched {
