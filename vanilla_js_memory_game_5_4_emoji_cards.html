@@ -103,15 +103,25 @@
       position: absolute;
       inset: 0;
       transform-style: preserve-3d;
+      transform: rotateY(0deg); /* show backs initially */
+      will-change: transform;
       transition: transform 420ms cubic-bezier(.2,.8,.2,1);
       border-radius: inherit;
-      overflow: clip;
+      overflow: hidden; /* Safari-friendly over clip */
     }
 
     .face, .back {
       background: var(--purple);
-      font-size: clamp(26px, 10cqw, 42px);
       transform: rotateY(0deg);
+    }
+    .back::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(12px 12px at 20% 30%, rgba(255,255,255,.22), transparent 60%),
+                  radial-gradient(10px 10px at 70% 60%, rgba(0,0,0,.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: .35;
+      pointer-events: none;
     }
     .back::after {
       content: "";
@@ -125,7 +135,7 @@
 
     .back {
       background: var(--purple);
-      font-size: 24px;
+      transform: rotateY(0deg);
     }
     .back::after { /* subtle pattern */
       content: "";
@@ -137,10 +147,9 @@
     }
 
     .face {
-      transform: rotateY(180deg);
-      font-size: clamp(26px, 10cqw, 42px);
       background: #ffffff; /* white face background */
       color: #111;
+      transform: rotateY(180deg); /* hidden initially */
     }
 
     /* Flip by rotating the inner wrapper (restores animation) */
