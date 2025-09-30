@@ -81,11 +81,7 @@
       outline: none;
       border: 1px solid rgba(255,255,255,.06);
       background: transparent;
-      display: block; /* avoid Safari button backface quirks */
-      -webkit-appearance: none;
-      appearance: none;
-      transform-style: preserve-3d;
-      -webkit-transform-style: preserve-3d;
+      display: block;
     }
 
   /* Rotate ONLY the inner wrapper on flip */
@@ -93,25 +89,27 @@
       position: absolute;
       inset: 0;
       transform-style: preserve-3d;
-      -webkit-transform-style: preserve-3d;
       transition: transform 420ms cubic-bezier(.2,.8,.2,1);
       border-radius: inherit;
       overflow: hidden;
-      will-change: transform;
-      transform: rotateY(0deg);
-      -webkit-transform: rotateY(0deg);
     }
   .card.flipped .card-inner,
-    .card[aria-pressed="true"] .card-inner {
-      transform: rotateY(180deg);
-      -webkit-transform: rotateY(180deg);
-    }
+    .card[aria-pressed="true"] .card-inner { transform: rotateY(180deg); }
 
   /* Both sides fill the card and are perfectly centered */
   .face, .back {
       background: var(--purple);
-      transform: rotateY(0deg) translateZ(1px);
-      -webkit-transform: rotateY(0deg) translateZ(1px);
+      transform: rotateY(0deg);
+    }
+    .back::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(12px 12px at 20% 30%, rgba(255,255,255,.22), transparent 60%),
+        radial-gradient(10px 10px at 70% 60%, rgba(0,0,0,.2), transparent 60%);
+      mix-blend-mode: soft-light;
+      opacity: .35;
+      pointer-events: none;
     }
     .back::after {
       content: "";
@@ -144,8 +142,7 @@
   .face {
       background: #ffffff;
       color: #111;
-      transform: rotateY(180deg) translateZ(1px);
-      -webkit-transform: rotateY(180deg) translateZ(1px);
+      transform: rotateY(180deg);
     }
 
   /* Matched → fade out */
@@ -238,21 +235,27 @@
       }
 
       function createCard(emoji, index) {
-        const btn = document.createElement('button');
-        btn.className = 'card';
-        btn.setAttribute('type', 'button');
-        btn.setAttribute('role', 'gridcell');
-        btn.setAttribute('aria-pressed', 'false');
-        btn.dataset.value = emoji;
-        btn.dataset.index = index;
-        btn.innerHTML = `
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-pressed', 'false');
+        card.dataset.value = emoji;
+        card.dataset.index = index;
+        card.innerHTML = `
           <div class="card-inner">
             <div class="back" aria-hidden="true"></div>
             <div class="face" aria-hidden="true">${emoji}</div>
           </div>
         `;
-        btn.addEventListener('click', onFlip);
-        return btn;
+        card.addEventListener('click', onFlip);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onFlip({ currentTarget: card });
+          }
+        });
+        return card;
       }
 
       function onFlip(e) {
