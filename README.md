@@ -7,6 +7,14 @@ Flip cards to reveal emoji faces, match pairs to make them disappear, and try to
 
 ---
 
+## 🧪 Full article
+
+📖 This repository is part of my vibe-coding experiment, where I challenged ChatGPT, Claude, and Gemini to build a simple memory game. You can read the full write-up — including screenshots, code examples, and a detailed comparison — here:
+
+👉 [https://michalcichon.github.io/programming/2025/10/01/game-vibecoded-in-chatgpt-gemini-and-claude.html](https://michalcichon.github.io/programming/2025/10/01/game-vibecoded-in-chatgpt-gemini-and-claude.html)
+
+---
+
 ## ✨ Features
 
 - 🃏 **20 cards (5×4 grid)** – each card hides an emoji face (fruits, vegetables, animals, symbols).
@@ -87,6 +95,13 @@ This project is licensed under the [MIT License](LICENSE).
 ## 🧠 About This Project
 
 This project was **vibe-coded with ChatGPT 5** — built collaboratively through iterative conversation and debugging, purely for fun and learning. 🎉
+
+---
+
+## 🧠 About the fix
+
+The original implementation was created by ChatGPT and is fully functional, but it contained a few subtle issues — for example, inconsistent card flipping and minor visual glitches.  
+The `claude-fix` version shows how Claude approached the same code and improved the final behavior, offering a more polished result with minimal changes.
 
 ---
 
